@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorSample.data
+package com.lukasanda.navikatorSample.model
 
 @kotlinx.serialization.Serializable
 data class DetailData(val randomId: Int)

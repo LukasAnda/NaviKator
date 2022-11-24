@@ -9,31 +9,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
-import com.lukasanda.navikator.NavRoute
 import com.lukasanda.navikator.RouteNavigator
-import com.lukasanda.navikatorSample.data.DetailData
+import com.lukasanda.navikatorSample.model.DetailData
 import com.lukasanda.navikatorSample.ui.detail.DetailRoute
 import com.lukasanda.navikatorannotation.NavigationRoute
-import org.koin.androidx.compose.viewModel
-import org.koin.core.parameter.parametersOf
 import kotlin.random.Random
 
-@NavigationRoute
-object HomeRoute : NavRoute<HomeViewModel> {
-    override val route: String = "home"
-    @Composable
-    override fun viewModel(vararg args: Any?) = viewModel<HomeViewModel> { parametersOf(*args) }
-
-    @Composable
-    override fun Content(viewModel: HomeViewModel) = Home(viewModel)
-
-}
-
+@NavigationRoute("home")
 class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), HomeInteractor,
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
-        routeNavigator.navigateToRoute(DetailRoute.navigate(DetailData(randomId)))
+        routeNavigator.navigateToRoute(DetailRoute.navigateSafe(DetailData(randomId)))
     }
 
 }
@@ -43,6 +30,7 @@ interface HomeInteractor {
 }
 
 @Composable
+@NavigationRoute("home")
 fun Home(interactor: HomeInteractor) {
     Column(
         modifier = Modifier.fillMaxSize(),

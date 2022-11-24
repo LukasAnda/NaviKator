@@ -1,27 +1,22 @@
 package com.lukasanda.navikatorprocessor.validator
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSAnnotation
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSFunctionDeclaration
-import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
 import com.lukasanda.navikatorannotation.NavigationRoute
 
 class SymbolValidator(private val logger: KSPLogger) {
 
     fun isValid(symbol: KSAnnotated): Boolean {
-        return symbol is KSClassDeclaration
+        return (symbol is KSClassDeclaration && symbol.isViewModel() || symbol is KSFunctionDeclaration)
                 && symbol.validate()
-                && symbol.isRoute()
     }
 
 }
 
-private fun KSClassDeclaration.isRoute(): Boolean {
-    val androidFragment = "com.lukasanda.navikator.NavRoute"
-    return isSubclassOf(androidFragment)
+private fun KSClassDeclaration.isViewModel(): Boolean {
+    val androidViewModel = "androidx.lifecycle.ViewModel"
+    return isSubclassOf(androidViewModel)
 }
 
 private fun KSClassDeclaration.isSubclassOf(
@@ -48,7 +43,7 @@ private fun KSClassDeclaration.isSubclassOf(
     return false 
 }
 
-private fun KSClassDeclaration.getRouteAnnotation(): KSAnnotation {
+internal fun KSDeclaration.getRouteAnnotation(): KSAnnotation {
     val annotationKClass = NavigationRoute::class
     return annotations.filter {
         it.annotationType
