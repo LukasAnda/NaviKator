@@ -17,7 +17,7 @@ import com.lukasanda.navikatorSample.data.DetailData
 import com.lukasanda.navikatorannotation.NavigationRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.viewModel
-import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.parameter.parametersOf
 
 @NavigationRoute
 object DetailRoute : NavRoute<DetailViewModel> {
@@ -28,8 +28,7 @@ object DetailRoute : NavRoute<DetailViewModel> {
     )
 
     @Composable
-    override fun viewModel(parameters: ParametersDefinition?) =
-        viewModel<DetailViewModel>(parameters = parameters)
+    override fun viewModel(vararg args: Any?) = viewModel<DetailViewModel> { parametersOf(*args) }
 
     @Composable
     override fun Content(viewModel: DetailViewModel) = Detail(viewModel)

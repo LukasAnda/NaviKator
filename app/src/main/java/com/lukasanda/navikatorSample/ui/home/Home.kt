@@ -13,17 +13,16 @@ import com.lukasanda.navikator.NavRoute
 import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikatorSample.data.DetailData
 import com.lukasanda.navikatorSample.ui.detail.DetailRoute
+import com.lukasanda.navikatorannotation.NavigationRoute
 import org.koin.androidx.compose.viewModel
-import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.parameter.parametersOf
 import kotlin.random.Random
 
 @NavigationRoute
 object HomeRoute : NavRoute<HomeViewModel> {
     override val route: String = "home"
-
     @Composable
-    override fun viewModel(parameters: ParametersDefinition?) =
-        viewModel<HomeViewModel>(parameters = parameters)
+    override fun viewModel(vararg args: Any?) = viewModel<HomeViewModel> { parametersOf(*args) }
 
     @Composable
     override fun Content(viewModel: HomeViewModel) = Home(viewModel)
