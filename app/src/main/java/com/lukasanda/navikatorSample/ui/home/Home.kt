@@ -20,6 +20,7 @@ import kotlin.random.Random
 object Home : HomeRoute {
     @Composable
     override fun provideViewModel(): Lazy<HomeViewModel> = viewModel()
+    @Composable override fun Content(viewModel: HomeViewModel) = Home(interactor = viewModel)
 
 }
 
@@ -28,6 +29,7 @@ class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), H
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
+        Log.d("TAG", "Somethingdf")
         routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
     }
 
@@ -38,7 +40,6 @@ interface HomeInteractor {
 }
 
 @Composable
-@NavigationRoute("home")
 fun Home(interactor: HomeInteractor) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -47,7 +48,6 @@ fun Home(interactor: HomeInteractor) {
     ) {
         Button(
             onClick = {
-                Log.d("TAG", "")
                 interactor.showDetail(Random.nextInt())
             }
         ) {

@@ -1,18 +1,17 @@
 package com.lukasanda.navikatorprocessor.validator
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSAnnotation
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.validate
 import com.lukasanda.navikatorannotation.NavigationRoute
 
-class SymbolValidator(private val logger: KSPLogger) {
+class NavigationRouteValidator(private val logger: KSPLogger) {
 
     fun isValid(symbol: KSAnnotated): Boolean {
-        logger.warn("Symbol is Class: ${symbol is KSClassDeclaration}")
-        logger.warn("Symbol is viewModel: ${(symbol as? KSClassDeclaration)?.isViewModel()}")
-        logger.warn("Symbol is function: ${symbol is KSFunctionDeclaration}")
-        return (symbol is KSClassDeclaration && symbol.isViewModel() || symbol is KSFunctionDeclaration)
-//                && symbol.validate()
+        return symbol is KSClassDeclaration && symbol.isViewModel() && symbol.validate()
     }
 
 }

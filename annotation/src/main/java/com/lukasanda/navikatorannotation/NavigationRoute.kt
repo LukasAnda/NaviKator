@@ -1,5 +1,5 @@
 package com.lukasanda.navikatorannotation
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class NavigationRoute(val route: String)

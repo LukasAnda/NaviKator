@@ -1,6 +1,5 @@
 package com.lukasanda.navikatorSample.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +24,8 @@ object Detail : DetailRoute {
     override fun provideViewModel(detailData: DetailData) = viewModel<DetailViewModel> {
         parametersOf(detailData)
     }
+
+    @Composable override fun Content(viewModel: DetailViewModel) = Detail(viewModel = viewModel)
 }
 
 @NavigationRoute("detail")
@@ -37,7 +38,6 @@ class DetailViewModel(
 }
 
 @Composable
-@NavigationRoute("detail")
 fun Detail(viewModel: DetailViewModel) {
     val uiState by viewModel.state.collectAsState()
     Column(
@@ -45,7 +45,6 @@ fun Detail(viewModel: DetailViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Log.d("TAG", "SFUFsfsdf bjsdfsdf")
         Text(
             text = "Random userID is: ${uiState.randomId}",
             color = MaterialTheme.colorScheme.onSurface
