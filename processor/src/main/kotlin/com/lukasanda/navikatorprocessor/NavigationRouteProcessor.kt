@@ -1,5 +1,6 @@
 package com.lukasanda.navikatorprocessor
 
+import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
@@ -23,6 +24,7 @@ class NavigationRouteProcessor(
     private val validator = SymbolValidator(logger)
     private val generator = NavigationRouteGenerator(codeGenerator, logger)
 
+    @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         var unresolvedSymbols: List<KSAnnotated> = emptyList()
         val annotationName = NavigationRoute::class.qualifiedName
@@ -30,11 +32,9 @@ class NavigationRouteProcessor(
         if (annotationName != null) {
             logger.info("Declared route process started")
             val resolved = resolver
-                .getSymbolsWithAnnotation(annotationName)
+                .getSymbolsWithAnnotation(annotationName, true)
                 .toList()
-            logger.warn("resolved size: ${resolved.size}")
             val validatedSymbols = resolved.filter { it.validate() }.toList()
-            logger.warn("validated size: ${resolved.size}")
             validatedSymbols
                 .filter {
                     validator.isValid(it)
@@ -61,7 +61,7 @@ class NavigationRouteProcessor(
                         it.key
                     )
                 }
-            unresolvedSymbols = resolved - validatedSymbols
+            unresolvedSymbols = resolved - validatedSymbols.toSet()
         }
         return unresolvedSymbols
     }

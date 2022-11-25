@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel
 import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikatorSample.model.DetailData
 import com.lukasanda.navikatorSample.ui.detail.Detail
-import com.lukasanda.navikatorSample.ui.detail.DetailRoute
 import com.lukasanda.navikatorannotation.NavigationRoute
 import org.koin.androidx.compose.viewModel
 import kotlin.random.Random
@@ -49,7 +48,6 @@ fun Home(interactor: HomeInteractor) {
         Button(
             onClick = {
                 interactor.showDetail(Random.nextInt())
-                Log.d("TAG", "Hellouihihi")
             }
         ) {
             Text(text = "Click to go to detail")

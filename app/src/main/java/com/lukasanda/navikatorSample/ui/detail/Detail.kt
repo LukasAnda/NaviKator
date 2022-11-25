@@ -45,7 +45,7 @@ fun Detail(viewModel: DetailViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Log.d("TAG", "SFUFsfsdf")
+        Log.d("TAG", "SFUFsfsdf bjsdfsdf")
         Text(
             text = "Random userID is: ${uiState.randomId}",
             color = MaterialTheme.colorScheme.onSurface
