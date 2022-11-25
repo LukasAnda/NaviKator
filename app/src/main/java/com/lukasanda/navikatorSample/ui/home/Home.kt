@@ -24,12 +24,11 @@ object Home : HomeRoute {
 
 }
 
-@NavigationRoute("home")
+@NavigationRoute("home", "sample")
 class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), HomeInteractor,
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
-        Log.d("TAG", "Somethingdf")
         routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
     }
 

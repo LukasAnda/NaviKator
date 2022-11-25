@@ -28,7 +28,7 @@ object Detail : DetailRoute {
     @Composable override fun Content(viewModel: DetailViewModel) = Detail(viewModel = viewModel)
 }
 
-@NavigationRoute("detail")
+@NavigationRoute("detail", "sample")
 class DetailViewModel(
     @NavigationArg private val detailData: DetailData, private val routeNavigator: RouteNavigator
 ) : ViewModel(), RouteNavigator by routeNavigator {

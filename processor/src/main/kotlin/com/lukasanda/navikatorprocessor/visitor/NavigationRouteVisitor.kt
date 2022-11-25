@@ -31,6 +31,9 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
         val route = annotation.arguments
             .first { arg -> arg.name?.asString() == "route" }.value.toString()
 
+        val schema = annotation.arguments
+            .first { arg -> arg.name?.asString() == "schema" }.value.toString()
+
         val routeName = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }.plus("Route")
 
         val packageName = viewModel.packageName.asString()
@@ -66,6 +69,16 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                             .getter(
                                 FunSpec.getterBuilder()
                                     .addStatement("return %S", route)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addProperty(
+                        PropertySpec.builder("appUrl", String::class)
+                            .addModifiers(KModifier.OVERRIDE)
+                            .getter(
+                                FunSpec.getterBuilder()
+                                    .addStatement("return %S", schema)
                                     .build()
                             )
                             .build()
