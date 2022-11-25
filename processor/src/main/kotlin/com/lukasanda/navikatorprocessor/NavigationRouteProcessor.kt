@@ -32,7 +32,9 @@ class NavigationRouteProcessor(
             val resolved = resolver
                 .getSymbolsWithAnnotation(annotationName)
                 .toList()
+            logger.warn("resolved size: ${resolved.size}")
             val validatedSymbols = resolved.filter { it.validate() }.toList()
+            logger.warn("validated size: ${resolved.size}")
             validatedSymbols
                 .filter {
                     validator.isValid(it)

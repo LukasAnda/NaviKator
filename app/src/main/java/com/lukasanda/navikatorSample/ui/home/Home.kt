@@ -1,5 +1,6 @@
 package com.lukasanda.navikatorSample.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,6 +49,7 @@ fun Home(interactor: HomeInteractor) {
         Button(
             onClick = {
                 interactor.showDetail(Random.nextInt())
+                Log.d("TAG", "Hellouihihi")
             }
         ) {
             Text(text = "Click to go to detail")
