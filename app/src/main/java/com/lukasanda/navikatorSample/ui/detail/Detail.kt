@@ -16,6 +16,15 @@ import com.lukasanda.navikatorSample.model.DetailData
 import com.lukasanda.navikatorannotation.NavigationArg
 import com.lukasanda.navikatorannotation.NavigationRoute
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.androidx.compose.viewModel
+import org.koin.core.parameter.parametersOf
+
+object Detail : DetailRoute {
+    @Composable
+    override fun provideViewModel(detailData: DetailData) = viewModel<DetailViewModel> {
+        parametersOf(detailData)
+    }
+}
 
 @NavigationRoute("detail")
 class DetailViewModel(

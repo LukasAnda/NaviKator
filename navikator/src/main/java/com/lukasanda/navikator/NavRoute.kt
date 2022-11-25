@@ -44,7 +44,7 @@ interface NavRoute<T : RouteNavigator> {
      * Returns the screen's ViewModel.
      */
     @Composable
-    fun viewModel(vararg args: Any?): Lazy<T>
+    fun provideViewModelInternal(vararg args: Any?): Lazy<T>
 
     /**
      * Override when this page uses arguments.
@@ -150,7 +150,7 @@ interface NavRoute<T : RouteNavigator> {
                 }
             }.toTypedArray()
 
-            val viewModel by viewModel(*args)
+            val viewModel by provideViewModelInternal(*args)
             val viewStateAsState by viewModel.navigationState.collectAsState()
 
             LaunchedEffect(viewStateAsState) {

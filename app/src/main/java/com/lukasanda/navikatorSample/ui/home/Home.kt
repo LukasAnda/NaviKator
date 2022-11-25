@@ -11,16 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikatorSample.model.DetailData
+import com.lukasanda.navikatorSample.ui.detail.Detail
 import com.lukasanda.navikatorSample.ui.detail.DetailRoute
 import com.lukasanda.navikatorannotation.NavigationRoute
+import org.koin.androidx.compose.viewModel
 import kotlin.random.Random
+
+object Home : HomeRoute {
+    @Composable
+    override fun provideViewModel(): Lazy<HomeViewModel> = viewModel()
+
+}
 
 @NavigationRoute("home")
 class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), HomeInteractor,
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
-        routeNavigator.navigateToRoute(DetailRoute.navigateSafe(DetailData(randomId)))
+        routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
     }
 
 }

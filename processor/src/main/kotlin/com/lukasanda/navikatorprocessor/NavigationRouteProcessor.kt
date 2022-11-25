@@ -21,7 +21,7 @@ class NavigationRouteProcessor(
 ) : SymbolProcessor {
 
     private val validator = SymbolValidator(logger)
-    private val generator = NavigationRouteGenerator(codeGenerator)
+    private val generator = NavigationRouteGenerator(codeGenerator, logger)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         var unresolvedSymbols: List<KSAnnotated> = emptyList()

@@ -1,6 +1,7 @@
 package com.lukasanda.navikatorprocessor.generator
 
 import com.google.devtools.ksp.processing.CodeGenerator
+import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.squareup.kotlinpoet.*
@@ -10,7 +11,7 @@ import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 
 @OptIn(KotlinPoetKspPreview::class)
-class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
+class NavigationRouteGenerator(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) {
     fun generate(viewModel: KSClassDeclaration, content: KSFunctionDeclaration, route: String) {
 
         val packageName = viewModel.packageName.asString()
@@ -28,12 +29,10 @@ class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
             navArgs.forEach {
                 addImport(it.second.packageName, it.second.simpleName)
             }
-            addImport("org.koin.androidx.compose", "viewModel")
-            addImport("org.koin.core.parameter", "parametersOf")
             addImport(viewModel.packageName.asString(), viewModel.simpleName.asString())
             addImport(content.packageName.asString(), content.simpleName.asString())
             addType(
-                TypeSpec.objectBuilder(routeName)
+                TypeSpec.interfaceBuilder(routeName)
                     .addSuperinterface(
                         ClassName("com.lukasanda.navikator", "NavRoute")
                             .parameterizedBy(
@@ -46,7 +45,11 @@ class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
                     .addProperty(
                         PropertySpec.builder("route", String::class)
                             .addModifiers(KModifier.OVERRIDE)
-                            .initializer("%S", route)
+                            .getter(
+                                FunSpec.getterBuilder()
+                                    .addStatement("return %S", route)
+                                    .build()
+                            )
                             .build()
                     )
                     .addFunction(
@@ -57,7 +60,10 @@ class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
                                     addParameter(it.first.toString(), it.second)
                                 }
                             }
-                            .addStatement("return navigate(${navArgs.joinToString(", ") { "%N" }})", *navArgs.map { it.first.toString() }.toTypedArray())
+                            .addStatement(
+                                "return navigate(${navArgs.joinToString(", ") { "%N" }})",
+                                *navArgs.map { it.first.toString() }.toTypedArray()
+                            )
                             .build()
                     )
                     .addFunction(
@@ -88,7 +94,34 @@ class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
                             .build()
                     )
                     .addFunction(
-                        FunSpec.builder("viewModel")
+                        FunSpec.builder("provideViewModel")
+                            .apply {
+                                navArgs.forEach {
+                                    addParameter(it.first.toString(), it.second)
+                                }
+                            }
+                            .addAnnotation(
+                                ClassName(
+                                    packageName = "androidx.compose.runtime",
+                                    "Composable"
+                                )
+                            )
+                            .addModifiers(KModifier.ABSTRACT)
+                            .returns(
+                                ClassName(
+                                    packageName = "kotlin",
+                                    "Lazy"
+                                ).parameterizedBy(
+                                    ClassName(
+                                        viewModel.packageName.asString(),
+                                        viewModel.simpleName.asString()
+                                    )
+                                )
+                            )
+                            .build()
+                    )
+                    .addFunction(
+                        FunSpec.builder("provideViewModelInternal")
                             .addAnnotation(
                                 ClassName(
                                     packageName = "androidx.compose.runtime",
@@ -114,8 +147,11 @@ class NavigationRouteGenerator(private val codeGenerator: CodeGenerator) {
                                     )
                                 )
                             ).addStatement(
-                                "return viewModel<%N> { parametersOf(*args) }",
-                                viewModel.simpleName.asString()
+                                "return provideViewModel(${
+                                    navArgs.mapIndexed { index, pair ->
+                                        "${pair.first} = args[$index] as ${pair.second.simpleName}"
+                                    }.joinToString(", ")
+                                })"
                             )
                             .build()
                     )
