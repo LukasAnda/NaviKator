@@ -1,5 +1,6 @@
 package com.lukasanda.navikatorSample.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,32 +10,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
-import com.lukasanda.navikator.NavRoute
 import com.lukasanda.navikator.RouteNavigator
-import com.lukasanda.navikatorSample.data.DetailData
-import com.lukasanda.navikatorSample.ui.detail.DetailRoute
+import com.lukasanda.navikatorSample.model.DetailData
+import com.lukasanda.navikatorSample.ui.detail.Detail
+import com.lukasanda.navikatorannotation.NavigationRoute
 import org.koin.androidx.compose.viewModel
-import org.koin.core.parameter.ParametersDefinition
 import kotlin.random.Random
 
-@NavigationRoute
-object HomeRoute : NavRoute<HomeViewModel> {
-    override val route: String = "home"
-
+object Home : HomeRoute {
     @Composable
-    override fun viewModel(parameters: ParametersDefinition?) =
-        viewModel<HomeViewModel>(parameters = parameters)
-
-    @Composable
-    override fun Content(viewModel: HomeViewModel) = Home(viewModel)
+    override fun provideViewModel(): Lazy<HomeViewModel> = viewModel()
+    @Composable override fun Content(viewModel: HomeViewModel) = Home(interactor = viewModel)
 
 }
 
+@NavigationRoute("home")
 class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), HomeInteractor,
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
-        routeNavigator.navigateToRoute(DetailRoute.navigate(DetailData(randomId)))
+        Log.d("TAG", "Somethingdf")
+        routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
     }
 
 }
@@ -55,7 +51,7 @@ fun Home(interactor: HomeInteractor) {
                 interactor.showDetail(Random.nextInt())
             }
         ) {
-            Text(text = "Click to go to detail")
+            Text(text = "Click to go to detailld")
         }
     }
 }

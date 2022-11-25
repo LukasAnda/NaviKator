@@ -19,8 +19,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import org.koin.core.parameter.ParametersDefinition
-import org.koin.core.parameter.parametersOf
 import java.net.URLDecoder
 import java.net.URLEncoder
 import kotlin.reflect.KClassifier
@@ -43,10 +41,10 @@ interface NavRoute<T : RouteNavigator> {
     fun Content(viewModel: T)
 
     /**
-     * Returns the screen's ViewModel. Needs to be overridden so that Hilt can generate code for the factory for the ViewModel class.
+     * Returns the screen's ViewModel.
      */
     @Composable
-    fun viewModel(parameters: ParametersDefinition?): Lazy<T>
+    fun provideViewModelInternal(vararg args: Any?): Lazy<T>
 
     /**
      * Override when this page uses arguments.
@@ -150,9 +148,9 @@ interface NavRoute<T : RouteNavigator> {
                             Json.decodeFromString(serializer(classifier.createType()), it)
                         }
                 }
-            }.toTypedArray().let { parametersOf(*it) }
+            }.toTypedArray()
 
-            val viewModel by viewModel(args.let { { it } })
+            val viewModel by provideViewModelInternal(*args)
             val viewStateAsState by viewModel.navigationState.collectAsState()
 
             LaunchedEffect(viewStateAsState) {

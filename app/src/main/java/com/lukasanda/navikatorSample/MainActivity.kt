@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.lukasanda.navikatorSample.ui.detail.DetailRoute
-import com.lukasanda.navikatorSample.ui.home.HomeRoute
+import com.lukasanda.navikatorSample.ui.detail.Detail
+import com.lukasanda.navikatorSample.ui.home.Home
 import com.lukasanda.navikatorSample.ui.theme.NaviKatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                         Surface(
                             modifier = Modifier
                                 .padding(innerPadding)
+
                                 .fillMaxSize(),
                             color = MaterialTheme.colorScheme.surface
                         ) {
@@ -52,10 +53,10 @@ class MainActivity : ComponentActivity() {
 fun NavigationComponent(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
-        startDestination = HomeRoute.createRoute(),
+        startDestination = Home.createRoute(),
     ) {
-        HomeRoute.composable(this, navHostController)
-        DetailRoute.composable(this, navHostController)
+        Home.composable(this, navHostController)
+        Detail.composable(this, navHostController)
     }
 }
 
