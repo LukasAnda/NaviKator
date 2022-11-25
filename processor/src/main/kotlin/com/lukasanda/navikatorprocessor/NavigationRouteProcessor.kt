@@ -34,8 +34,10 @@ class NavigationRouteProcessor(
             val resolved = resolver
                 .getSymbolsWithAnnotation(annotationName, true)
                 .toList()
+            logger.warn("Resolved size: ${resolved.size}")
             val validatedSymbols = resolved.filter { it.validate() }.toList()
-            validatedSymbols
+            logger.warn("Validated size: ${validatedSymbols.size}")
+            resolved
                 .filter {
                     validator.isValid(it)
                 }
@@ -44,11 +46,18 @@ class NavigationRouteProcessor(
                     annotation?.arguments?.first()?.value.toString()
                 }.filter {
                     if (it.value.size != 2) {
-                        logger.error("Navigation route ${it.key} needs to be declared for both ViewModel and content function")
+                        logger.error("Navigation route ${it.key} needs to be declared for both ViewModel and content function, size is ${it.value.size}")
+                        return@filter false
                     }
 
-                    if(it.value.find { it is KSClassDeclaration } == null || it.value.find { it is KSFunctionDeclaration } == null) {
-                        logger.error("Navigation route ${it.key} needs to be declared for both ViewModel and content function")
+                    if (it.value.find { it is KSClassDeclaration } == null) {
+                        logger.error("Could not find any ViewModel required by NavigationRoute(${it.key})")
+                        return@filter false
+                    }
+
+                    if (it.value.find { it is KSFunctionDeclaration } == null) {
+                        logger.error("Could not find any Content function required by NavigationRoute(${it.key})")
+                        return@filter false
                     }
 
                     it.value.size == 2

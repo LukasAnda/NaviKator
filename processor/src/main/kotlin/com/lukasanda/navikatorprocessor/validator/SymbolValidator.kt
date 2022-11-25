@@ -8,8 +8,11 @@ import com.lukasanda.navikatorannotation.NavigationRoute
 class SymbolValidator(private val logger: KSPLogger) {
 
     fun isValid(symbol: KSAnnotated): Boolean {
+        logger.warn("Symbol is Class: ${symbol is KSClassDeclaration}")
+        logger.warn("Symbol is viewModel: ${(symbol as? KSClassDeclaration)?.isViewModel()}")
+        logger.warn("Symbol is function: ${symbol is KSFunctionDeclaration}")
         return (symbol is KSClassDeclaration && symbol.isViewModel() || symbol is KSFunctionDeclaration)
-                && symbol.validate()
+//                && symbol.validate()
     }
 
 }

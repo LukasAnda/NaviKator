@@ -47,10 +47,11 @@ fun Home(interactor: HomeInteractor) {
     ) {
         Button(
             onClick = {
+                Log.d("TAG", "")
                 interactor.showDetail(Random.nextInt())
             }
         ) {
-            Text(text = "Click to go to detail")
+            Text(text = "Click to go to detailld")
         }
     }
 }
