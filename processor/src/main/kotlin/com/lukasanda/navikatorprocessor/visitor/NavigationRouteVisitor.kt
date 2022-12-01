@@ -20,10 +20,10 @@ import java.util.*
 
 class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisitorVoid() {
     @OptIn(KotlinPoetKspPreview::class)
-    override fun visitClassDeclaration(viewModel: KSClassDeclaration, data: Unit) {
-        super.visitClassDeclaration(viewModel, data)
+    override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
+        super.visitClassDeclaration(classDeclaration, data)
 
-        val annotation: KSAnnotation = viewModel.annotations.first {
+        val annotation: KSAnnotation = classDeclaration.annotations.first {
             it.shortName.asString() == "NavigationRoute"
         }
 
@@ -36,10 +36,10 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
 
         val routeName = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }.plus("Route")
 
-        val packageName = viewModel.packageName.asString()
+        val packageName = classDeclaration.packageName.asString()
 //        val routeName = content.simpleName.asString() + "Route"
 //
-        val navArgs = viewModel.primaryConstructor
+        val navArgs = classDeclaration.primaryConstructor
             ?.parameters
             ?.filter { it.annotations.find { it.shortName.asString() == "NavigationArg" } != null }
             ?.map { it.name?.asString() to it.type.resolve().toClassName() }
@@ -51,15 +51,17 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
             navArgs.forEach {
                 addImport(it.second.packageName, it.second.simpleName)
             }
-            addImport(viewModel.packageName.asString(), viewModel.simpleName.asString())
+            addImport(
+                classDeclaration.packageName.asString(),
+                classDeclaration.simpleName.asString())
             addType(
                 TypeSpec.interfaceBuilder(routeName)
                     .addSuperinterface(
                         ClassName("com.lukasanda.navikator", "NavRoute")
                             .parameterizedBy(
                                 ClassName(
-                                    viewModel.packageName.asString(),
-                                    viewModel.simpleName.asString()
+                                    classDeclaration.packageName.asString(),
+                                    classDeclaration.simpleName.asString()
                                 )
                             )
                     )
@@ -144,8 +146,8 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                                     "Lazy"
                                 ).parameterizedBy(
                                     ClassName(
-                                        viewModel.packageName.asString(),
-                                        viewModel.simpleName.asString()
+                                        classDeclaration.packageName.asString(),
+                                        classDeclaration.simpleName.asString()
                                     )
                                 )
                             )
@@ -173,8 +175,8 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                                     "Lazy"
                                 ).parameterizedBy(
                                     ClassName(
-                                        viewModel.packageName.asString(),
-                                        viewModel.simpleName.asString()
+                                        classDeclaration.packageName.asString(),
+                                        classDeclaration.simpleName.asString()
                                     )
                                 )
                             ).addStatement(
