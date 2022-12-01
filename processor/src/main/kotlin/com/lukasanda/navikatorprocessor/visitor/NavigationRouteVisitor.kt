@@ -4,17 +4,11 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.PropertySpec
-import com.squareup.kotlinpoet.TypeSpec
-import com.squareup.kotlinpoet.asTypeName
 import com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview
 import com.squareup.kotlinpoet.ksp.toClassName
+import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import java.util.*
 
@@ -34,26 +28,31 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
         val schema = annotation.arguments
             .first { arg -> arg.name?.asString() == "schema" }.value.toString()
 
-        val routeName = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }.plus("Route")
+        val routeName =
+            route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                .plus("Route")
 
         val packageName = classDeclaration.packageName.asString()
-//        val routeName = content.simpleName.asString() + "Route"
-//
+
         val navArgs = classDeclaration.primaryConstructor
             ?.parameters
             ?.filter { it.annotations.find { it.shortName.asString() == "NavigationArg" } != null }
-            ?.map { it.name?.asString() to it.type.resolve().toClassName() }
+            ?.map { it.name?.asString() to it.type }
             ?: emptyList()
 
         val fileSpec = FileSpec.builder(packageName, routeName).apply {
             addImport("androidx.compose.runtime", "Composable")
             addImport("com.lukasanda.navikator", "NavRoute")
             navArgs.forEach {
-                addImport(it.second.packageName, it.second.simpleName)
+                addImport(
+                    it.second.resolve().toClassName().packageName,
+                    it.second.resolve().toClassName().simpleName
+                )
             }
             addImport(
                 classDeclaration.packageName.asString(),
-                classDeclaration.simpleName.asString())
+                classDeclaration.simpleName.asString()
+            )
             addType(
                 TypeSpec.interfaceBuilder(routeName)
                     .addSuperinterface(
@@ -90,7 +89,7 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                             .returns(String::class)
                             .apply {
                                 navArgs.forEach {
-                                    addParameter(it.first.toString(), it.second)
+                                    addParameter(it.first.toString(), it.second.toTypeName())
                                 }
                             }
                             .addStatement(
@@ -120,7 +119,7 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                                 })", *(navArgs.map {
                                     listOf(
                                         it.first.toString(),
-                                        it.second.simpleName
+                                        it.second.resolve().toClassName().simpleName
                                     )
                                 }.flatten().toTypedArray())
                             )
@@ -130,7 +129,7 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                         FunSpec.builder("provideViewModel")
                             .apply {
                                 navArgs.forEach {
-                                    addParameter(it.first.toString(), it.second)
+                                    addParameter(it.first.toString(), it.second.toTypeName())
                                 }
                             }
                             .addAnnotation(
@@ -161,6 +160,16 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                                     "Composable"
                                 )
                             )
+                            .addAnnotation(
+                                AnnotationSpec.builder(
+                                    ClassName(
+                                        packageName = "kotlin",
+                                        "Suppress"
+                                    )
+                                )
+                                    .addMember("%S", "UNCHECKED_CAST")
+                                    .build()
+                            )
                             .addModifiers(KModifier.OVERRIDE)
                             .addParameter(
                                 ParameterSpec.builder(
@@ -182,25 +191,12 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
                             ).addStatement(
                                 "return provideViewModel(${
                                     navArgs.mapIndexed { index, pair ->
-                                        "${pair.first} = args[$index] as ${pair.second.simpleName}"
+                                        "${pair.first} = args[$index] as %T"
                                     }.joinToString(", ")
-                                })"
+                                })", *navArgs.map { it.second.toTypeName() }.toTypedArray()
                             )
                             .build()
                     )
-//                    .addFunction(
-//                        FunSpec.builder("Content")
-//                            .addAnnotation(
-//                                ClassName(
-//                                    packageName = "androidx.compose.runtime",
-//                                    "Composable"
-//                                )
-//                            )
-//                            .addModifiers(KModifier.OVERRIDE)
-//                            .addParameter("viewModel", viewModel.toClassName())
-//                            .addStatement("return %N(viewModel)", content.simpleName.asString())
-//                            .build()
-//                    )
                     .build()
             )
         }.build()
