@@ -1,9 +1,9 @@
-package com.lukasanda.navikatorSample
+package com.lukasanda.navikator.sample
 
 import android.app.Application
 import com.lukasanda.navikator.BuildConfig
-import com.lukasanda.navikatorSample.di.navigatorModule
-import com.lukasanda.navikatorSample.di.viewModelModule
+import com.lukasanda.navikator.sample.di.navigatorModule
+import com.lukasanda.navikator.sample.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

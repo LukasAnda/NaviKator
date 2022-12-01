@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorannotation
+package com.lukasanda.navikator.annotation
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.SOURCE)

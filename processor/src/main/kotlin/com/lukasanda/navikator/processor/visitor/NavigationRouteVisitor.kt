@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorprocessor.visitor
+package com.lukasanda.navikator.processor.visitor
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.symbol.KSAnnotation

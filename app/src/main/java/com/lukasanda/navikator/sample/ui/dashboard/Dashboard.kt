@@ -1,9 +1,9 @@
-package com.lukasanda.navikatorSample.ui.dashboard
+package com.lukasanda.navikator.sample.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import com.lukasanda.navikator.RouteNavigator
-import com.lukasanda.navikatorannotation.NavigationArg
-import com.lukasanda.navikatorannotation.NavigationRoute
+import com.lukasanda.navikator.annotation.NavigationArg
+import com.lukasanda.navikator.annotation.NavigationRoute
 
 @NavigationRoute("dashboard", "sample")
 class DashboardViewModel(

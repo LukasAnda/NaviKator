@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorSample.ui.theme
+package com.lukasanda.navikator.sample.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

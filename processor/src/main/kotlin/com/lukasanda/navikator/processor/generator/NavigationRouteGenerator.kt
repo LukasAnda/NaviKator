@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorprocessor.generator
+package com.lukasanda.navikator.processor.generator
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger

@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorprocessor.validator
+package com.lukasanda.navikator.processor.validator
 
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotated
@@ -6,7 +6,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.validate
-import com.lukasanda.navikatorannotation.NavigationRoute
+import com.lukasanda.navikator.annotation.NavigationRoute
 
 class NavigationRouteValidator(private val logger: KSPLogger) {
 

@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorSample.ui.detail
+package com.lukasanda.navikator.sample.ui.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.lukasanda.navikator.RouteNavigator
-import com.lukasanda.navikatorSample.model.DetailData
-import com.lukasanda.navikatorannotation.NavigationArg
-import com.lukasanda.navikatorannotation.NavigationRoute
+import com.lukasanda.navikator.sample.model.DetailData
+import com.lukasanda.navikator.annotation.NavigationArg
+import com.lukasanda.navikator.annotation.NavigationRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf

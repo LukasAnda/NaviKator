@@ -1,6 +1,5 @@
-package com.lukasanda.navikatorSample.ui.home
+package com.lukasanda.navikator.sample.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.lukasanda.navikator.RouteNavigator
-import com.lukasanda.navikatorSample.model.DetailData
-import com.lukasanda.navikatorSample.ui.detail.Detail
-import com.lukasanda.navikatorannotation.NavigationRoute
+import com.lukasanda.navikator.sample.model.DetailData
+import com.lukasanda.navikator.sample.ui.detail.Detail
+import com.lukasanda.navikator.annotation.NavigationRoute
 import org.koin.androidx.compose.viewModel
 import kotlin.random.Random
 
