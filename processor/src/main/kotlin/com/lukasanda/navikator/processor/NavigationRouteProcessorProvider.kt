@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorprocessor
+package com.lukasanda.navikator.processor
 
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment

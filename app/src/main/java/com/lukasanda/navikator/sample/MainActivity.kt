@@ -1,4 +1,4 @@
-package com.lukasanda.navikatorSample
+package com.lukasanda.navikator.sample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,9 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.lukasanda.navikatorSample.ui.detail.Detail
-import com.lukasanda.navikatorSample.ui.home.Home
-import com.lukasanda.navikatorSample.ui.theme.NaviKatorTheme
+import com.lukasanda.navikator.sample.ui.detail.Detail
+import com.lukasanda.navikator.sample.ui.home.Home
+import com.lukasanda.navikator.sample.ui.theme.NaviKatorTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)

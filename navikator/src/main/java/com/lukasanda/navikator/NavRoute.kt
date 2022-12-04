@@ -28,11 +28,11 @@ import kotlin.reflect.full.createType
  * A route the app can navigate to.
  */
 
-private const val APP_URL = "example"
-
 interface NavRoute<T : RouteNavigator> {
 
     val route: String
+    val appUrl: String
+        get() = ""
 
     /**
      * Returns the screen's content.
@@ -81,7 +81,7 @@ interface NavRoute<T : RouteNavigator> {
     fun createDeepLinks() = listOf(
         navDeepLink {
             uriPattern = buildString {
-                append("$APP_URL://$route")
+                append("$appUrl://$route")
                 getNavArgs().forEachIndexed { index, argument ->
                     if (index == 0) {
                         append("?")
