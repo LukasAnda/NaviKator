@@ -18,5 +18,5 @@ dependencyResolutionManagement {
 rootProject.name = "NaviKator"
 include ':app'
 include ':navikator'
-include ':navikator-processor'
+include ':processor'
 include ':annotation'

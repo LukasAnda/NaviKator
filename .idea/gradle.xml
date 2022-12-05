@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/annotation" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/navikator" />
-            <option value="$PROJECT_DIR$/navikator-processor" />
+            <option value="$PROJECT_DIR$/processor" />
           </set>
         </option>
       </GradleProjectSettings>
