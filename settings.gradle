@@ -10,10 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            setUrl("https://jitpack.io") //IMPORTANT BIT
+        }
     }
 }
 rootProject.name = "NaviKator"
 include ':app'
 include ':navikator'
-include ':processor'
+include ':navikator-processor'
 include ':annotation'
