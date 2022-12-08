@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
+import com.lukasanda.navikator.HomeRoute
 import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikator.sample.model.DetailData
 import com.lukasanda.navikator.sample.ui.detail.Detail
@@ -28,6 +29,7 @@ class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), H
     RouteNavigator by routeNavigator {
 
     override fun showDetail(randomId: Int) {
+
         routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
     }
 
