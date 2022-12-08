@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
+import com.lukasanda.navikator.DetailRoute
 import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikator.sample.model.DetailData
 import com.lukasanda.navikator.annotation.NavigationArg
@@ -23,6 +24,7 @@ object Detail : DetailRoute {
     @Composable
     override fun provideViewModel(detailData: DetailData) = viewModel<DetailViewModel> {
         parametersOf(detailData)
+
     }
 
     @Composable override fun Content(viewModel: DetailViewModel) = Detail(viewModel = viewModel)

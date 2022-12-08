@@ -11,7 +11,7 @@ import com.lukasanda.navikator.annotation.NavigationRoute
 class NavigationRouteValidator(private val logger: KSPLogger) {
 
     fun isValid(symbol: KSAnnotated): Boolean {
-        return symbol is KSClassDeclaration && symbol.isViewModel() && symbol.validate()
+        return symbol is KSClassDeclaration && symbol.isViewModel() && symbol.isRouteNavigator() && symbol.validate()
     }
 
 }
@@ -19,6 +19,11 @@ class NavigationRouteValidator(private val logger: KSPLogger) {
 private fun KSClassDeclaration.isViewModel(): Boolean {
     val androidViewModel = "androidx.lifecycle.ViewModel"
     return isSubclassOf(androidViewModel)
+}
+
+private fun KSClassDeclaration.isRouteNavigator(): Boolean {
+    val navigator = "com.lukasanda.navikator.RouteNavigator"
+    return isSubclassOf(navigator)
 }
 
 private fun KSClassDeclaration.isSubclassOf(
@@ -43,13 +48,4 @@ private fun KSClassDeclaration.isSubclassOf(
         }
     }
     return false 
-}
-
-internal fun KSDeclaration.getRouteAnnotation(): KSAnnotation {
-    val annotationKClass = NavigationRoute::class
-    return annotations.filter {
-        it.annotationType
-            .resolve()
-            .declaration.qualifiedName?.asString() == annotationKClass.qualifiedName
-    }.first()
 }
