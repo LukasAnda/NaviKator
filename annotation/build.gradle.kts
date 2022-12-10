@@ -16,7 +16,7 @@ afterEvaluate {
                 from(components["java"])
                 artifactId = "annotation"
                 groupId = "com.github.lukasanda.navikator"
-                version = "1.0.0"
+                version = "1.0.1"
             }
         }
     }
