@@ -8,9 +8,17 @@ sourceSets.main {
     java.srcDirs("src/main/kotlin")
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").kotlin.srcDirs)
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                from(components["kotlin"])
+                artifactId = "processor"
+                groupId = "com.github.lukasanda.navikator"
+                version = "1.0.0"
+            }
+        }
+    }
 }
 
 
