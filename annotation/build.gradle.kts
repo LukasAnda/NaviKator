@@ -9,17 +9,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").java.srcDirs)
-}
-
 afterEvaluate {
     publishing {
         publications {
-            val release by publications.registering(MavenPublication::class) {
+            create<MavenPublication>("maven") {
                 from(components["java"])
-                artifact(sourcesJar.get())
                 artifactId = "annotation"
                 groupId = "com.github.lukasanda.navikator"
                 version = "1.0.0"

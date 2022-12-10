@@ -47,17 +47,11 @@ android {
     }
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(android.sourceSets.getByName("main").java.srcDirs)
-}
-
 afterEvaluate {
     publishing {
         publications {
-            val release by publications.registering(MavenPublication::class) {
+            create<MavenPublication>("maven") {
                 from(components["release"])
-                artifact(sourcesJar.get())
                 artifactId = "navikator"
                 groupId = "com.github.lukasanda.navikator"
                 version = "1.0.0"
