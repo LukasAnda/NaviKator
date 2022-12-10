@@ -54,7 +54,7 @@ afterEvaluate {
                 from(components["release"])
                 artifactId = "navikator"
                 groupId = "com.github.lukasanda.navikator"
-                version = "1.0.0"
+                version = "1.0.1"
             }
         }
     }
