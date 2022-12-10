@@ -32,7 +32,7 @@ class NavigationRouteVisitor(private val codeGenerator: CodeGenerator) : KSVisit
             route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 .plus("Route")
 
-        val packageName = classDeclaration.packageName.asString()
+        val packageName = "com.lukasanda.navikator"
 
         val navArgs = classDeclaration.primaryConstructor
             ?.parameters
