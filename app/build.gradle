@@ -83,9 +83,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 
-    implementation project(":navikator")
-    implementation project(":annotation")
-    ksp project(':processor')
+    implementation "com.github.LukasAnda.NaviKator:annotation:1.0.1"
+    implementation "com.github.LukasAnda.NaviKator:navikator:1.0.1"
+    ksp "com.github.LukasAnda.NaviKator:processor:1.0.1"
 
     implementation "io.insert-koin:koin-android:3.1.5"
     implementation "io.insert-koin:koin-androidx-compose:3.1.5"
