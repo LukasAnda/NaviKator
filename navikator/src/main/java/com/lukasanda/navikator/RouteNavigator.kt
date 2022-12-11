@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface RouteNavigator {
     fun onNavigated(state: NavigationState)
     fun navigateUp()
-    fun navigateToRoute(route: String)
+    fun navigateToRoute(route: String, clearBackstack: Boolean = false)
     fun openApp(packageName: String)
     fun closeApp()
 
@@ -26,7 +26,8 @@ class MyRouteNavigator : RouteNavigator {
 
     override fun navigateUp() = navigate(NavigationState.NavigateUp)
 
-    override fun navigateToRoute(route: String) = navigate(NavigationState.NavigateToRoute(route))
+    override fun navigateToRoute(route: String, clearBackstack: Boolean) =
+        navigate(NavigationState.NavigateToRoute(route, clearBackstack))
 
     override fun openApp(packageName: String) = navigate(NavigationState.NavigateToApp(packageName))
 
