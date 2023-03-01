@@ -9,28 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
-import com.lukasanda.navikator.HomeRoute
-import com.lukasanda.navikator.RouteNavigator
 import com.lukasanda.navikator.sample.model.DetailData
-import com.lukasanda.navikator.sample.ui.detail.Detail
-import com.lukasanda.navikator.annotation.NavigationRoute
-import org.koin.androidx.compose.viewModel
+import com.lukasanda.navikator.sample.ui.NavGraphs
+import com.lukasanda.navikator.sample.ui.destinations.DetailDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.scope.DestinationScope
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.random.Random
 
-object Home : HomeRoute {
-    @Composable
-    override fun provideViewModel(): Lazy<HomeViewModel> = viewModel()
-    @Composable override fun Content(viewModel: HomeViewModel) = Home(interactor = viewModel)
-
-}
-
-@NavigationRoute("home", "sample")
-class HomeViewModel(private val routeNavigator: RouteNavigator) : ViewModel(), HomeInteractor,
-    RouteNavigator by routeNavigator {
+class HomeViewModel(private val navigator: DestinationsNavigator) : ViewModel(), HomeInteractor {
 
     override fun showDetail(randomId: Int) {
-
-        routeNavigator.navigateToRoute(Detail.navigateSafe(DetailData(randomId)))
+        navigator.navigate(DetailDestination(DetailData(randomId)))
     }
 
 }
@@ -39,8 +32,12 @@ interface HomeInteractor {
     fun showDetail(randomId: Int)
 }
 
+@Destination()
+@RootNavGraph(start = true)
 @Composable
-fun Home(interactor: HomeInteractor) {
+fun DestinationScope<*>.Home(
+    interactor: HomeInteractor = getViewModel<HomeViewModel>() { parametersOf(destinationsNavigator) },
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -51,7 +48,7 @@ fun Home(interactor: HomeInteractor) {
                 interactor.showDetail(Random.nextInt())
             }
         ) {
-            Text(text = "Click to go to detailld")
+            Text(text = "Click to go to detaill")
         }
     }
 }

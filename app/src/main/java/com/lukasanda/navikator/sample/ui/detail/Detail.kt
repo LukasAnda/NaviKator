@@ -10,37 +10,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.lukasanda.navikator.DetailRoute
-import com.lukasanda.navikator.RouteNavigator
+import androidx.navigation.NavArgs
 import com.lukasanda.navikator.sample.model.DetailData
-import com.lukasanda.navikator.annotation.NavigationArg
-import com.lukasanda.navikator.annotation.NavigationRoute
+import com.lukasanda.navikator.sample.ui.navArgs
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.androidx.compose.viewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
-object Detail : DetailRoute {
-    @Composable
-    override fun provideViewModel(detailData: DetailData) = viewModel<DetailViewModel> {
-        parametersOf(detailData)
-
-    }
-
-    @Composable override fun Content(viewModel: DetailViewModel) = Detail(viewModel = viewModel)
-}
-
-@NavigationRoute("detail", "sample")
 class DetailViewModel(
-    @NavigationArg private val detailData: DetailData, private val routeNavigator: RouteNavigator
-) : ViewModel(), RouteNavigator by routeNavigator {
-
-    val state = MutableStateFlow(detailData)
-
+    private val savedStateHandle: SavedStateHandle,
+) : ViewModel(){
+    val state = MutableStateFlow(savedStateHandle.navArgs() as DetailData)
 }
 
 @Composable
-fun Detail(viewModel: DetailViewModel) {
+@Destination(navArgsDelegate = DetailData::class)
+fun Detail(
+    viewModel: DetailViewModel = getViewModel<DetailViewModel>()
+) {
     val uiState by viewModel.state.collectAsState()
     Column(
         modifier = Modifier.fillMaxSize(),
